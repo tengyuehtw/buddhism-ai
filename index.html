@@ -43,12 +43,23 @@
   </div>
 
   <script>
-    function ask() {
-      const q = document.getElementById("question").value;
-      document.getElementById("answer").innerText =
-        "（此為示範版本）\n\n你提問的是：\n" + q +
-        "\n\n未來這裡會接上真正的佛學 AI 回答。";
-    }
+    async function ask() {
+  const q = document.getElementById("question").value;
+  const answerBox = document.getElementById("answer");
+
+  answerBox.innerText = "佛學 AI 思考中，請稍候…";
+
+  const response = await fetch("/api/ask", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ question: q })
+  });
+
+  const data = await response.json();
+  answerBox.innerText = data.answer || "沒有取得回應";
+}
   </script>
 </body>
 </html>
